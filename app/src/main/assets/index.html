@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>La Verdad de tu Milanesa</title>
+<style>
+:root {
+  --bg:#0b0b0b; --panel:#151515; --panel2:#1b1b1b; --line:#292929;
+  --gold:#d9aa42; --gold2:#f0c85f; --text:#f8f5ef; --muted:#bdb6aa;
+  --green:#25D366; --danger:#c84545;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#070707;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{min-height:100vh}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{width:min(100%,520px);margin:auto;min-height:100vh;background:linear-gradient(180deg,#0a0a0a,#101010);position:relative;padding-bottom:92px}
+.topbar{position:sticky;top:0;z-index:20;padding:11px 14px;background:#0b0b0bef;backdrop-filter:blur(14px);display:flex;align-items:center;gap:11px;border-bottom:1px solid #202020}
+.topbar img{width:45px;height:45px;border-radius:50%;object-fit:cover;border:1px solid #6e561d}
+.brand{flex:1;min-width:0}
+.brand strong{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{color:var(--muted);font-size:11px}
+.cartTop{border:1px solid #3a311f;background:#18140d;color:var(--gold2);border-radius:999px;padding:8px 11px;font-weight:800;position:relative}
+.cartTop b{background:var(--gold2);color:#111;border-radius:999px;min-width:18px;height:18px;padding:0 5px;display:inline-grid;place-items:center;font-size:10px;margin-left:4px}
+.view{display:none}
+.view.active{display:block}
+section{padding:16px}
+.hero{padding-top:12px}
+.heroCard{position:relative;border-radius:24px;overflow:hidden;border:1px solid #332813;min-height:410px;background:#111}
+.heroCard::before{content:"";position:absolute;inset:0;background:
+ linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.62) 58%,rgba(0,0,0,.95)),
+ radial-gradient(circle at 80% 15%,rgba(222,175,68,.15),transparent 38%);z-index:1}
+.heroVisual{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;opacity:.68}
+.heroVisual img{width:100%;height:100%;object-fit:cover}
+.heroCopy{position:absolute;z-index:2;left:18px;right:18px;bottom:18px}
+.eyebrow{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold2);font-weight:900}
+h1{font-size:32px;line-height:1.03;margin:7px 0 8px}
+.heroCopy p{margin:0 0 14px;color:#ddd;font-size:14px;line-height:1.4;max-width:390px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:0;border-radius:14px;padding:12px 14px;font-weight:900;font-size:13px}
+.btnGold{background:linear-gradient(135deg,#c69428,#f0c85f);color:#111}
+.btnDark{background:#171717;color:#fff;border:1px solid #353535}
+.btnGreen{background:var(--green);color:#082414}
+.btnFull{width:100%}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
+.quick button{background:#151515;border:1px solid #2b2b2b;color:white;border-radius:16px;padding:13px 8px;font-size:11px;font-weight:800}
+.quick span{display:block;font-size:20px;margin-bottom:5px;color:var(--gold2)}
+.head{display:flex;justify-content:space-between;align-items:end;gap:10px;margin-bottom:12px}
+.head h2{font-size:21px;margin:0}
+.head small{color:var(--muted);font-size:11px}
+.productGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:linear-gradient(180deg,#181818,#111);border:1px solid #272727;border-radius:20px;overflow:hidden}
+.card img{width:100%;height:165px;object-fit:cover;display:block}
+.cardBody{padding:12px}
+.tag{display:inline-block;border:1px solid #4a3919;background:#211a0d;color:var(--gold2);padding:5px 8px;border-radius:999px;font-size:9px;font-weight:900;letter-spacing:.4px}
+.card h3{font-size:16px;margin:8px 0 5px}
+.card p{color:var(--muted);font-size:11px;line-height:1.35;margin:0 0 10px}
+.fieldRow{display:grid;grid-template-columns:72px 1fr;gap:7px}
+.fieldRow input,.fieldRow select{min-width:0;background:#090909;color:white;border:1px solid #333;border-radius:11px;padding:9px 8px}
+.add{width:100%;margin-top:8px;border:0;border-radius:11px;padding:10px;background:#2a210e;color:var(--gold2);font-weight:900}
+.panel{background:#131313;border:1px solid #292929;border-radius:20px;padding:15px}
+.promoCard{display:flex;gap:12px;align-items:center;background:linear-gradient(135deg,#191306,#131313);border:1px solid #44351a;border-radius:18px;padding:12px;margin-bottom:10px}
+.promoCard img{width:92px;height:92px;object-fit:cover;border-radius:14px}
+.promoCard h3{margin:0 0 5px;font-size:15px}
+.promoCard p{margin:0 0 9px;color:var(--muted);font-size:11px;line-height:1.35}
+.promoCard button{border:0;border-radius:10px;background:#2b220f;color:var(--gold2);padding:8px 10px;font-size:11px;font-weight:900}
+.field{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.field label{font-size:11px;color:#cbc5ba}
+.field input,.field select,.field textarea{background:#090909;color:#fff;border:1px solid #343434;border-radius:12px;padding:12px}
+.field textarea{min-height:82px;resize:vertical}
+.cartItem{display:flex;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #252525}
+.cartItem img{width:62px;height:62px;border-radius:13px;object-fit:cover}
+.cartInfo{flex:1}
+.cartInfo b{font-size:13px}
+.cartInfo small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.remove{border:1px solid #442727;background:#1c1111;color:#e8a0a0;border-radius:9px;padding:7px 8px;font-size:10px}
+.empty{color:var(--muted);text-align:center;padding:26px 10px;font-size:13px}
+.summary{margin:12px 0;border-radius:14px;background:#0c0c0c;border:1px solid #2a2a2a;padding:12px;color:#ddd;font-size:12px;line-height:1.5}
+.notice{color:#8f8a82;font-size:10px;line-height:1.4;text-align:center;margin-top:10px}
+.bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(100%,520px);z-index:30;display:grid;grid-template-columns:repeat(5,1fr);background:#0b0b0bf3;backdrop-filter:blur(14px);border-top:1px solid #252525;padding:7px 4px max(7px,env(safe-area-inset-bottom))}
+.nav{border:0;background:none;color:#777;font-size:9px;font-weight:700;padding:4px 1px}
+.nav span{display:block;font-size:18px;margin-bottom:2px}
+.nav.active{color:var(--gold2)}
+.badge{display:inline-flex;align-items:center;gap:6px;color:#111;background:var(--gold2);font-size:9px;font-weight:900;border-radius:999px;padding:5px 8px}
+.splash{position:fixed;inset:0;background:#070707;z-index:99;display:grid;place-items:center;transition:.45s}
+.splash.hide{opacity:0;pointer-events:none}
+.splashInner{text-align:center;padding:30px}
+.splashInner img{width:190px;height:190px;border-radius:50%;object-fit:cover;box-shadow:0 0 40px #d9aa4233}
+.splashInner p{color:var(--gold2);font-weight:800;letter-spacing:1px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:102px;background:var(--gold2);color:#111;border-radius:999px;padding:10px 14px;font-size:11px;font-weight:900;z-index:80;box-shadow:0 10px 30px #0008}
+@media(max-width:390px){h1{font-size:29px}.card img{height:145px}.productGrid{gap:9px}}
+</style>
+</head>
+<body>
+<div class="splash" id="splash">
+  <div class="splashInner">
+    <img src="logo.jpg" alt="La Verdad de tu Milanesa">
+    <p>LA VERDAD DE TU MILANESA</p>
+  </div>
+</div>
+
+<div class="app">
+  <header class="topbar">
+    <img src="logo.jpg" alt="Logo">
+    <div class="brand">
+      <strong>La Verdad de tu Milanesa</strong>
+      <small>Carne · Pollo · Venta mayorista</small>
+    </div>
+    <button class="cartTop" onclick="showView('pedido')">🛒 <b id="topCount">0</b></button>
+  </header>
+
+  <main>
+    <div id="inicio" class="view active">
+      <section class="hero">
+        <div class="heroCard">
+          <div class="heroVisual">
+            <img src="carne.jpg" alt="Milanesas de carne">
+            <img src="pollo.jpg" alt="Milanesas de pollo">
+          </div>
+          <div class="heroCopy">
+            <div class="eyebrow">Bahía Blanca y alrededores</div>
+            <h1>Tu pedido de milanesas, más fácil.</h1>
+            <p>Elegí carne o pollo, armá tu pedido, consultá promociones y envialo directo por WhatsApp.</p>
+            <div class="actions">
+              <button class="btn btnGold" onclick="showView('productos')">Ver productos</button>
+              <button class="btn btnDark" onclick="showView('mayorista')">Soy comercio</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="quick">
+          <button onclick="showView('productos')"><span>🥩</span>Productos</button>
+          <button onclick="showView('promos')"><span>🏷️</span>Promos</button>
+          <button onclick="showView('pedido')"><span>🛒</span>Mi pedido</button>
+        </div>
+      </section>
+
+      <section>
+        <div class="head"><h2>Lo que vendemos</h2><small>Producto fresco</small></div>
+        <div class="productGrid">
+          <div class="card">
+            <img src="carne.jpg" alt="">
+            <div class="cardBody"><span class="tag">CARNE</span><h3>Milanesas de carne</h3><p>Preparadas para cocinar o freezar.</p><button class="add" onclick="showView('productos')">Pedir</button></div>
+          </div>
+          <div class="card">
+            <img src="pollo.jpg" alt="">
+            <div class="cardBody"><span class="tag">POLLO</span><h3>Milanesas de pollo</h3><p>Preparadas para cocinar o freezar.</p><button class="add" onclick="showView('productos')">Pedir</button></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="productos" class="view">
+      <section>
+        <div class="head"><h2>Productos</h2><small>Armá tu pedido</small></div>
+        <div class="productGrid">
+          <div class="card">
+            <img src="carne.jpg" alt="Milanesas de carne">
+            <div class="cardBody">
+              <span class="tag">CARNE</span><h3>Milanesas de carne</h3>
+              <p>Seleccioná la cantidad que necesitás.</p>
+              <div class="fieldRow">
+                <input id="qtyCarne" type="number" min="1" value="1">
+                <select id="unitCarne"><option>kg</option><option>bandeja/s</option><option>consultar</option></select>
+              </div>
+              <button class="add" onclick="addItem('Milanesas de carne','carne','qtyCarne','unitCarne')">Agregar al pedido</button>
+            </div>
+          </div>
+          <div class="card">
+            <img src="pollo.jpg" alt="Milanesas de pollo">
+            <div class="cardBody">
+              <span class="tag">POLLO</span><h3>Milanesas de pollo</h3>
+              <p>Seleccioná la cantidad que necesitás.</p>
+              <div class="fieldRow">
+                <input id="qtyPollo" type="number" min="1" value="1">
+                <select id="unitPollo"><option>kg</option><option>bandeja/s</option><option>consultar</option></select>
+              </div>
+              <button class="add" onclick="addItem('Milanesas de pollo','pollo','qtyPollo','unitPollo')">Agregar al pedido</button>
+            </div>
+          </div>
+        </div>
+        <p class="notice">Los precios y presentaciones pueden cargarse cuando definamos la lista vigente de la fábrica.</p>
+      </section>
+    </div>
+
+    <div id="promos" class="view">
+      <section>
+        <div class="head"><h2>Promociones</h2><small>Beneficios de la app</small></div>
+        <div class="promoCard">
+          <img src="carne.jpg" alt="">
+          <div><h3>Promos de carne</h3><p>Ofertas y descuentos por cantidad según disponibilidad.</p><button onclick="addPromo('Promo de milanesas de carne')">Quiero consultar</button></div>
+        </div>
+        <div class="promoCard">
+          <img src="pollo.jpg" alt="">
+          <div><h3>Promos de pollo</h3><p>Promociones especiales y opciones para freezer.</p><button onclick="addPromo('Promo de milanesas de pollo')">Quiero consultar</button></div>
+        </div>
+        <div class="promoCard">
+          <img src="combo.jpg" alt="">
+          <div><h3>Combo carne + pollo</h3><p>Consultá promociones combinadas y descuentos por cantidad.</p><button onclick="addPromo('Promo combinada carne y pollo')">Quiero consultar</button></div>
+        </div>
+      </section>
+    </div>
+
+    <div id="mayorista" class="view">
+      <section>
+        <div class="head"><h2>Venta mayorista</h2><small>Para comercios</small></div>
+        <div class="panel">
+          <div class="field"><label>Nombre del comercio</label><input id="mComercio" placeholder="Ej.: Almacén / Rotisería"></div>
+          <div class="field"><label>Localidad o barrio</label><input id="mLocalidad" placeholder="Bahía Blanca, Punta Alta, etc."></div>
+          <div class="field"><label>Producto de interés</label>
+            <select id="mProducto"><option>Carne y pollo</option><option>Milanesas de carne</option><option>Milanesas de pollo</option></select>
+          </div>
+          <div class="field"><label>Cantidad aproximada / consulta</label><textarea id="mConsulta" placeholder="Contanos qué necesitás..."></textarea></div>
+          <button class="btn btnGreen btnFull" onclick="sendWholesale()">Consultar mayorista por WhatsApp</button>
+          <p class="notice">La aprobación de precios, stock y condiciones se confirma por WhatsApp.</p>
+        </div>
+      </section>
+    </div>
+
+    <div id="pedido" class="view">
+      <section>
+        <div class="head"><h2>Mi pedido</h2><small id="countLabel">0 productos</small></div>
+        <div class="panel">
+          <div id="cartList"><div class="empty">Todavía no agregaste productos.</div></div>
+          <div id="cartSummary" class="summary" style="display:none"></div>
+          <div class="field"><label>Nombre</label><input id="cliente" placeholder="Tu nombre"></div>
+          <div class="field"><label>Zona / dirección</label><input id="direccion" placeholder="Barrio, dirección o localidad"></div>
+          <div class="field"><label>Entrega</label><select id="entrega"><option>Coordinar entrega</option><option>Retiro / coordinar</option></select></div>
+          <div class="field"><label>Comentario</label><textarea id="comentario" placeholder="Horario, referencia, consulta, etc."></textarea></div>
+          <button class="btn btnGreen btnFull" onclick="sendOrder()">Enviar pedido por WhatsApp</button>
+          <button class="btn btnDark btnFull" style="margin-top:8px" onclick="clearCart()">Vaciar pedido</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <nav class="bottom">
+    <button class="nav active" data-view="inicio" onclick="showView('inicio',this)"><span>⌂</span>Inicio</button>
+    <button class="nav" data-view="productos" onclick="showView('productos',this)"><span>▦</span>Productos</button>
+    <button class="nav" data-view="promos" onclick="showView('promos',this)"><span>🏷</span>Promos</button>
+    <button class="nav" data-view="mayorista" onclick="showView('mayorista',this)"><span>🏪</span>Mayorista</button>
+    <button class="nav" data-view="pedido" onclick="showView('pedido',this)"><span>🛒</span>Pedido</button>
+  </nav>
+</div>
+
+<script>
+const PHONE = '5492914060831';
+let cart = [];
+const images = {carne:"carne.jpg", pollo:"pollo.jpg"};
+
+function viewFromHash() {
+  let id=(location.hash||'#inicio').slice(1);
+  if(!document.getElementById(id)) id='inicio';
+  showView(id);
+}
+
+function showView(id, btn) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav').forEach(b=>b.classList.remove('active'));
+  const nav=btn || document.querySelector(`[data-view="${id}"]`);
+  if(nav) nav.classList.add('active');
+  if(location.hash !== '#'+id) history.replaceState(null,'','#'+id);
+  window.scrollTo(0,0);
+}
+
+function toast(text) {
+  const t=document.createElement('div');
+  t.className='toast'; t.textContent=text;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),1500);
+}
+
+function addItem(name,type,qtyId,unitId) {
+  const qty=Math.max(1,parseInt(document.getElementById(qtyId).value||'1'));
+  const unit=document.getElementById(unitId).value;
+  const key=name+'|'+unit;
+  let row=cart.find(x=>x.key===key);
+  if(row) row.qty+=qty; else cart.push({key,name,type,qty,unit});
+  renderCart();
+  toast('Agregado al pedido');
+}
+
+function addPromo(name) {
+  const key='promo|'+name;
+  if(!cart.find(x=>x.key===key)) cart.push({key,name,type:'carne',qty:1,unit:'promo'});
+  renderCart();
+  toast('Promo agregada al pedido');
+}
+
+function removeItem(i) {
+  cart.splice(i,1);
+  renderCart();
+}
+
+function clearCart() {
+  cart=[];
+  renderCart();
+}
+
+function renderCart() {
+  const count=cart.reduce((a,b)=>a+b.qty,0);
+  document.getElementById('topCount').textContent=count;
+  document.getElementById('countLabel').textContent=count+' producto'+(count===1?'':'s');
+  const list=document.getElementById('cartList');
+  const sum=document.getElementById('cartSummary');
+  if(!cart.length) {
+    list.innerHTML='<div class="empty">Todavía no agregaste productos.</div>';
+    sum.style.display='none';
+    return;
+  }
+  list.innerHTML=cart.map((x,i)=>`
+    <div class="cartItem">
+      <img src="${images[x.type] || images.carne}">
+      <div class="cartInfo"><b>${x.name}</b><small>${x.qty} ${x.unit}</small></div>
+      <button class="remove" onclick="removeItem(${i})">Quitar</button>
+    </div>`).join('');
+  sum.style.display='block';
+  sum.innerHTML='<b>Resumen</b><br>'+cart.map(x=>`• ${x.qty} ${x.unit} — ${x.name}`).join('<br>');
+}
+
+function openWA(text) {
+  const url='https://wa.me/'+PHONE+'?text='+encodeURIComponent(text);
+  window.location.href=url;
+}
+
+function sendOrder() {
+  if(!cart.length) { toast('Primero agregá un producto'); return; }
+  const cliente=document.getElementById('cliente').value.trim() || 'Cliente';
+  const direccion=document.getElementById('direccion').value.trim();
+  const entrega=document.getElementById('entrega').value;
+  const comentario=document.getElementById('comentario').value.trim();
+
+  let msg='Hola, soy '+cliente+'. Quiero hacer este pedido en La Verdad de tu Milanesa:\n\n';
+  msg += cart.map(x=>'• '+x.qty+' '+x.unit+' — '+x.name).join('\n');
+  msg += '\n\nEntrega: '+entrega;
+  if(direccion) msg += '\nZona/dirección: '+direccion;
+  if(comentario) msg += '\nComentario: '+comentario;
+  msg += '\n\n¿Me confirman disponibilidad, precio final y entrega?';
+  openWA(msg);
+}
+
+function sendWholesale() {
+  const comercio=document.getElementById('mComercio').value.trim() || 'Comercio';
+  const localidad=document.getElementById('mLocalidad').value.trim() || 'Sin indicar';
+  const producto=document.getElementById('mProducto').value;
+  const consulta=document.getElementById('mConsulta').value.trim();
+  let msg='Hola, soy de '+comercio+'. Quiero consultar por venta mayorista de La Verdad de tu Milanesa.\n';
+  msg += 'Localidad: '+localidad+'\nProducto: '+producto;
+  if(consulta) msg += '\nConsulta: '+consulta;
+  msg += '\n\n¿Me pasan precios, presentaciones y condiciones de entrega?';
+  openWA(msg);
+}
+
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('splash').classList.add('hide'),650);
+  const params=new URLSearchParams(location.search);
+  if(params.get('demo')==='1') {
+    cart=[
+      {key:'Milanesas de carne|kg',name:'Milanesas de carne',type:'carne',qty:2,unit:'kg'},
+      {key:'Milanesas de pollo|kg',name:'Milanesas de pollo',type:'pollo',qty:1,unit:'kg'}
+    ];
+    renderCart();
+  }
+  viewFromHash();
+});
+window.addEventListener('hashchange',viewFromHash);
+renderCart();
+</script>
+</body>
+</html>
